@@ -1,13 +1,32 @@
 package dev.sirnacho.se350Project;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+// The newly updated Spring Boot 4 import path:
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@AutoConfigureMockMvc 
 class WebApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Autowired
+    private MockMvc mockMvc;
 
+    @Test
+    void contextLoads() {
+        // Ensures the application context boots successfully
+    }
+
+    @Test
+    void testEndpointReturnsCorrectString() throws Exception {
+        mockMvc.perform(get("/test"))
+               .andExpect(status().isOk())
+               .andExpect(content().string("Hello SE350! The backend is running!")); 
+    }
 }
