@@ -6,7 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     
-    # We only need Java 21 since that is what your pom.xml requires
     strategy:
       matrix:
         java-version: [ 21 ]
@@ -15,11 +14,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          distribution: 'temurin' # 'adopt' was deprecated and rebranded to 'temurin'
+          distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
           
       - name: Run Maven Tests
-        # 'clean test' specifically runs your JUnit tests without packaging the whole jar
+        working-directory: ./backend
         run: mvn -B clean test --no-transfer-progress
 
   coverage:
@@ -34,11 +33,11 @@ jobs:
           java-version: 21
           
       - name: Run Verify for Coverage
+        working-directory: ./backend
         run: mvn -B verify --no-transfer-progress
 
       - uses: codecov/codecov-action@v4
         with:
-          file: ./**/target/site/jacoco/jacoco.xml
+          # Updated to point explicitly into the backend folder just to be safe!
+          file: ./backend/target/site/jacoco/jacoco.xml 
           name: codecov
-          # Note: Codecov v4 requires a token for public repos. 
-          # If this fails, add: token: ${{ secrets.CODECOV_TOKEN }}
