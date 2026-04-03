@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: black;
+  color: #b088f9;
+}
+
+a {
+  color: #b088f9;
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+#app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+.nes-icon {
+  transition: all 0.3s ease;
+}
+
+a:hover .nes-icon {
+  filter: drop-shadow(0 0 12px #b088f9);
+}
+
+.list-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.nes-list.is-disc {
+  width: fit-content;
+  text-align: left;
+  padding-left: 0;
+}
+
+.nes-list.is-disc li::before {
+  color: #b088f9 !important;
+  margin-right: 15px;
+}
+
+.nes-list.is-disc li {
+  color: #b088f9;
+  list-style-type: none;
+}
+
+footer {
+  padding: 1rem;
+  text-align: center;
+  background-color: black;
+  color: #b088f9;
+  border-top: 1px solid #333;
+}
+
+Header, header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  z-index: 1000;
+  color: #b088f9;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+Header a, header a, footer a {
+  color: #b088f9;
+  text-decoration: none;
+}
+
+.test-container {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+  min-height: 100vh;
+}

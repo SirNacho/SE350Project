@@ -1,27 +1,69 @@
-# Compiled class file
-*.class
-
-# Log file
+# Spring Boot
+/target/
+/build/
+.out/
+.classpath
+.project
+.settings/
+*.iml
+*.ipr
+*.iws
+!src/main/resources/application-*.properties
+!src/main/resources/application.properties
+*.bak
+*.swp
 *.log
+.h2.server.properties
 
-# BlueJ files
-*.ctxt
+# IntelliJ IDEA
+.idea/
+*.iml
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# Eclipse
+/.classpath
+/.project
+/.settings/
 
-# Ignore .env for security
-.env
+# VSCode
+.vscode/
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+# Maven
+maven.log
+mvn.out
+mvn-error.log
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Gradle
+.gradle/
+build/
+
+# Node.js / Vue.js
+/node_modules/
+dist/
+*.log
+.env            # Ignore environment variable files
+.env.*
+!.env.example   # Keep a sample .env file
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE and Editor Specific Files
+*.sublime-project
+*.sublime-workspace
+nbproject/private/
+
+# Temporary Files
+*~
+*.bak
+*.tmp
+*.swp
+*.lock
+
+# Logs
+logs/
+log/
+
+# macOS
+/.Spotlight-V100
+.fseventsd/
