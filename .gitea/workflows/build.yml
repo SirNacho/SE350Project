@@ -24,7 +24,7 @@ jobs:
         working-directory: ./backend
         run: mvn -B clean test --no-transfer-progress
 
-coverage:
+  coverage:
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -45,6 +45,7 @@ coverage:
       - name: Upload to Codecov
         uses: codecov/codecov-action@v4
         with:
+          # Use a wildcard to ensure it finds the file regardless of path quirks
           file: "**/jacoco.xml"
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: SirNacho/SE350Project
