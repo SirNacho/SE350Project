@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: dev.sirnacho.se350Project.WebApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.230 s -- in dev.sirnacho.se350Project.WebApplicationTests
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.873 s -- in dev.sirnacho.se350Project.WebApplicationTests
