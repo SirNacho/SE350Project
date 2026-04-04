@@ -34,7 +34,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
-          
+      
+      - name: Install Maven
+        run: sudo apt-get update && sudo apt-get install -y maven
+        
       - name: Run Verify for Coverage
         working-directory: ./backend
         run: mvn -B verify --no-transfer-progress
