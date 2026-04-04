@@ -16,7 +16,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: ${{ matrix.java-version }}
-          
+      
+      - name: Install Maven
+        run: sudo apt-get update && sudo apt-get install -y maven
+      
       - name: Run Maven Tests
         working-directory: ./backend
         run: mvn -B clean test --no-transfer-progress
