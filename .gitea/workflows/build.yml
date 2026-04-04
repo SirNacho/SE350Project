@@ -45,8 +45,8 @@ jobs:
         - name: Upload to Codecov
         uses: codecov/codecov-action@v4
         with:
-          file: ./backend/target/site/jacoco/jacoco.xml 
+          file: ./backend/target/site/jacoco/jacoco.xml
           name: codecov
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: SirNacho/SE350Project 
+          slug: SirNacho/SE350Project
           fail_ci_if_error: true
