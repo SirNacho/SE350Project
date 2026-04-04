@@ -36,7 +36,10 @@ jobs:
         working-directory: ./backend
         run: mvn -B verify --no-transfer-progress
 
-      - uses: codecov/codecov-action@v4
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
         with:
           file: ./backend/target/site/jacoco/jacoco.xml 
           name: codecov
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
