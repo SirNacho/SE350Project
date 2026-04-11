@@ -36,6 +36,9 @@ _deps/
 build/
 bin/
 
+#Executables to ignore
+src/main
+
 # CLion / JetBrains IDE
 .idea/
 cmake-build-*/
