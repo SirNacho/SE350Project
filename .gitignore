@@ -1,0 +1,53 @@
+# C++ Compiled Artifacts
+*.slo
+*.lo
+*.o
+*.obj
+
+*.gch
+*.pch
+
+*.so
+*.dylib
+*.dll
+
+*.lai
+*.la
+*.a
+*.lib
+
+*.exe
+*.out
+*.app
+
+# CMake Build Artifacts
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Ignore custom build directories
+build/
+bin/
+
+# CLion / JetBrains IDE
+.idea/
+cmake-build-*/
+
+#VS-Code
+.vscode
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
