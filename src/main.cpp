@@ -2,7 +2,13 @@
 
 //External Libraries
 #include <SDL3/SDL.h>
-#include <glm/glm.hpp>
+//#include <glm/glm.hpp>
+#include <SDL3/SDL_main.h>
+#include <string>
+
+//Constants
+constexpr int kScreenWidth = 640;
+constexpr int kScreenHeight = 480;
 
 int main()
 {
