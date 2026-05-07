@@ -36,6 +36,9 @@ _deps/
 build/
 bin/
 
+#Test Files for music testing
+musicSamples/
+
 #Executables to ignore
 src/main
 
