@@ -6,14 +6,14 @@ class audioEngine
 {
   public:
   audioEngine();
-  ~AudioEngine();
+  ~audioEngine();
 
   bool init();
-  void playFile(const std::String& pwd);
+  void playFile(const std::string& pwd);
   void stop();
 
   private:
   //Note: This is so that the program won't access miniaudio except for this class.
-  miniAudioEngine maEngine;
+  ma_engine maEngine;
   bool m_isIntialized = false;
-}
+};

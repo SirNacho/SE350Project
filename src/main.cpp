@@ -29,20 +29,17 @@ int main(int argc, char* argv[])
   {
     fs::path pwd = fs::current_path();
     std::cout << "Current directory: \n" << pwd << std::endl;
+    std::cout << "Playing test music... Press enter to stop." << std::endl;
+    fs::path testPath = pwd / "src" / "assets" / "test.mp3";
+    engine.playFile(testPath.string());
+    std::cin.get();
+
+    std::cout << "Stopped music!" << std::endl;
+    return EXIT_SUCCESS;
   }
   catch (const fs::filesystem_error& e)
   {
     std::cout << "Error: cannot get directory of the music library. Shutting down the program...\n" << std::endl;
     return EXIT_FAILURE;
   }
-
-  std::cout << "Playing test music... Press enter to stop.\n" << std::endl;
-  engine.playFile("assets/test.mp3")
-  std::cin.get();
-
-  std::cout << "Stopped music!" << std::endl;
-
-  
-  
-  return EXIT_SUCCESS;
 }

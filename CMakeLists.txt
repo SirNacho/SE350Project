@@ -28,17 +28,22 @@ set(IMGUI_SOURCES
 
 add_executable(SE350Engine 
     "src/main.cpp"
+    "src/audioEngine.cpp"
+    "src/audioTest.cpp"
     ${IMGUI_SOURCES}
 )
 
+#Adding the external libraries and headers in include
 target_include_directories(SE350Engine PRIVATE 
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/stb"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/miniaudio"
     "${IMGUI_DIR}"
     "${IMGUI_DIR}/backends"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/sdl3/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 
+#Added SDL3 and threading
 target_link_libraries(SE350Engine PRIVATE 
     SDL3::SDL3-static
     pthread
