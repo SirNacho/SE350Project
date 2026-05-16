@@ -1,6 +1,9 @@
 #include <iostream>
 #include <atomic> //Note: This is for multi threading
 #include <filesystem>
+#include <vector>
+#include <chrono>
+#include <thread>
 
 namespace fs = std::filesystem;
 
@@ -12,6 +15,7 @@ namespace fs = std::filesystem;
 
 //Classes I made
 #include "audioEngine.h"
+#include "pathFileHelper.h"
 
 int audioTest()
 {
@@ -22,14 +26,23 @@ int audioTest()
      *
      */ 
 
-    audioEngine engine;
+    audioEngine& engine = audioEngine::getInstance();
     
     try
     {
         fs::path pwd = fs::current_path();
-        std::cout << "Current directory: \n" << pwd << std::endl;
-        std::cout << "Playing test music... Press enter to stop." << std::endl;
+        std::cout << "Current directory: " << pwd << std::endl;
+        
         fs::path testPath = pwd / "src" / "assets" / "test.mp3";
+        
+        if (!fs::exists(testPath)) 
+        {
+          std::cout << "Please put me at the root of the repo so that I can reach src/assets/test.mp3." << std::endl;
+          std::cout << "Error: This path " << testPath.string() << " doesn't exist. Shutting down the program..." << std::endl;
+          return 0;
+        }
+
+        std::cout << "Playing test music... Press enter to stop." << std::endl;
         engine.playFile(testPath.string());
         std::cin.get();
 

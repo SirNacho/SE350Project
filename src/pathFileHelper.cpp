@@ -21,14 +21,8 @@ bool isSupportedAudioFile(const std::string& inputPath)
   fs::path currentPath(inputPath);
   std::string extension = currentPath.extension().string();
 
-  if (extension == ".mp3" || extension == ".wav" || extension == ".flac")
-  {
-    return true;
-  } 
-  else
-  {
-    return false;
-  }
+  if (extension == ".mp3" || extension == ".wav" || extension == ".flac"){ return true; } 
+  else{ return false; }
 }
 
 std::vector<std::string> getMusicFilesInDirectory(const std::string& inputPath)
@@ -46,10 +40,7 @@ std::vector<std::string> getMusicFilesInDirectory(const std::string& inputPath)
   {
     std::string currentPathStr = entry.path().string();
 
-    if (isSupportedAudioFile(currentPathStr)) 
-    { 
-      musicFiles.push_back(currentPathStr); 
-    }
+    if (isSupportedAudioFile(currentPathStr)) { musicFiles.push_back(currentPathStr); }
   }
 
   return musicFiles;

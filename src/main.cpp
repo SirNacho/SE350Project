@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     return EXIT_SUCCESS;
   }
 
-  audioEngine engine;
+  audioEngine& engine = audioEngine::getInstance();
   
   std::cout << "Hello!\n";
   
