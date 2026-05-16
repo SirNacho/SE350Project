@@ -2,6 +2,7 @@
 [![build and test](https://github.com/SirNacho/SE350Project/actions/workflows/build.yml/badge.svg)](https://github.com/SirNacho/SE350Project/actions/workflows/build.yml)
 
 | Hi, welcome to my git repo for my SE 350 project!
+- Note: Sprint3 related information will be at the bottom of the readme.md.
 
 # Setup:
 - Frontend: ImGui
@@ -50,8 +51,8 @@ mv SE350Engine ..
 
 # Testing the program:
 If you want to debug and figure out whether the program can play a music. 
-- First, get a mp3 file and rename it to test.mp3. 
-- Then, place the test.mp3 to src/assets
+- First, get a mp3 file. Preferable, more than 1 or 2 audio file.
+- Then, place the mp3 files to src/assets
 - Finally, run the test command:
 ```
 ./SE350Engine --test
@@ -66,18 +67,22 @@ To test the program, run the program at the root of the repo and run the command
 ```
 ./SE350Engine --test
 ```
-To change the default path to a different directory, run this command:
-```
-./SE350Engine --path <path/to/music/directory>
-```
-To change the volume, run this command:
-```
-./SE350Engine --volume <0.0f - 1.0f>
-```
+
 
 # To-Do List:
-- Implement more strategies like shuffle or repeat strategies
+- Implement more strategies like repeat strategies
 - Implement a GUI using imgui or SDL3
 - Implement a TUI (optional)
 - Create UI for GUI
 - Check for memory leaks at the end
+
+# Sprint 3:
+### What do I want to show for my final submission?
+```
+I wanted to show a simple GUI music player app that shuffles or plays music. I'm hoping to go with a pixel art UI.
+```
+### Any problem I have with implementing design patterns that was keeping me from reaching the goal?
+```
+While one of the design patterns like Singleton pattern is easier to work with, the strategy pattern was more difficult. The strategy pattern is a little weird since I used concreteStrategies.h to be the interface and I put the actual algorithm in playBackStrategy.h. I don't have a lot of experience prior to the course on interface so it felt a little weird to me but I learned it's advantages like overwriting nextTrack() depending on the strategies used.
+
+```
