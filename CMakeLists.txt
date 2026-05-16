@@ -32,6 +32,7 @@ add_executable(SE350Engine
     "src/audioEngine.cpp"
     "src/audioTest.cpp"
     "src/appConfig.cpp"
+    "src/pathFileHelper.cpp"
     ${IMGUI_SOURCES}
 )
 
