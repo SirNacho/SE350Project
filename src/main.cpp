@@ -15,6 +15,8 @@ namespace fs = std::filesystem;
 
 //Classes I made
 #include "audioEngine.h"
+#include "audioTest.h"
+#include "appConfig.h"
 
 //Constants
 constexpr int kScreenWidth = 640;
@@ -22,25 +24,22 @@ constexpr int kScreenHeight = 480;
 
 int main(int argc, char* argv[])
 {
+  //Getting configuration based on arguments
+  appConfig config = appConfig::parseArgs(argc, argv);
+  
+  if (config.justVersionName) { return EXIT_SUCCESS; }
 
-  audioEngine engine;
-
-  try
+  if (config.testMode) 
   {
-    fs::path pwd = fs::current_path();
-    std::cout << "Current directory: \n" << pwd << std::endl;
-    std::cout << "Playing test music... Press enter to stop." << std::endl;
-    fs::path testPath = pwd / "src" / "assets" / "test.mp3";
-    engine.playFile(testPath.string());
-    std::cin.get();
-
-    std::cout << "Stopped music!" << std::endl;
+    audioTest();
     return EXIT_SUCCESS;
   }
-  catch (const fs::filesystem_error& e)
-  {
-    std::cout << "Error: cannot get directory of the music library. Shutting down the program...\n" << std::endl;
-    return EXIT_FAILURE;
-  }
+
+  audioEngine engine;
+  
+  std::cout << "Hello!\n";
+  
+  return EXIT_SUCCESS;
+
 }
 

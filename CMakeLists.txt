@@ -26,10 +26,12 @@ set(IMGUI_SOURCES
     "${IMGUI_DIR}/backends/imgui_impl_sdlrenderer3.cpp"
 )
 
+#Adding all cpp files needed for the program
 add_executable(SE350Engine 
     "src/main.cpp"
     "src/audioEngine.cpp"
     "src/audioTest.cpp"
+    "src/appConfig.cpp"
     ${IMGUI_SOURCES}
 )
 

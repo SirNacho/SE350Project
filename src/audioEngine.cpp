@@ -5,7 +5,7 @@ audioEngine::audioEngine()
 {
   if (init()) 
   {
-    std::cout << "AUdio Engine Intialized!" << std::endl;
+    std::cout << "Audio Engine Intialized!" << std::endl;
   }
 }
 
