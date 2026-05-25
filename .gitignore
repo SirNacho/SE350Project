@@ -36,11 +36,13 @@ _deps/
 build/
 bin/
 
-#Test Files for music testing
-src/assets/test.mp3
+#After production
+#Remove any mp3 files leftover
+#.mp3
 
 #Executables to ignore
 src/main
+SE350Engine
 
 # CLion / JetBrains IDE
 .idea/

@@ -29,17 +29,17 @@ appConfig appConfig::parseArgs(int argc, char* argv[])
       config.justVersionName = true;
     }
 
-    if (arg == "--test" || arg == "-t")
+    else if (arg == "--test" || arg == "-t")
     {
       config.testMode = true;
     }
 
-    if (arg == "--headless" || arg == "-hl") 
+    else if (arg == "--headless" || arg == "-hl") 
     {
       config.headlessMode = true;
     }
 
-    else if (arg == "--volume" || arg == "-v") 
+    else if (arg == "--volume") 
     {
       if (i + 1 < argc) 
       {
