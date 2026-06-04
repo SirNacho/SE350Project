@@ -1,6 +1,9 @@
-[submodule "lib/imgui"]
-	path = lib/imgui
-	url = https://github.com/ocornut/imgui.git
-[submodule "lib/sdl3"]
-	path = lib/sdl3
-	url = https://github.com/libsdl-org/SDL.git
+[submodule "lib/leif"]
+	path = lib/leif
+	url = https://github.com/cococry/leif.git
+[submodule "lib/glfw"]
+	path = lib/glfw
+	url = https://github.com/glfw/glfw.git
+[submodule "lib/cglm"]
+	path = lib/cglm
+	url = https://github.com/recp/cglm.git
