@@ -1,99 +1,144 @@
 #include "appConfig.h"
 #include <iostream>
-#include <filesystem>
-#include <string>
+#include <unordered_map>
+#include <memory>
 
-appConfig appConfig::parseArgs(int argc, char* argv[]) 
+namespace fs = std::filesystem;
+
+/*
+ * I rewrote this program cause I don't like how many if statements are there. Looks confusing to implement.
+ * I will implement the command pattern on this since I feel this is a best pattern to fix this. -SF
+ * */
+
+
+//Concrete commands
+class versionCommand : public ICommand
 {
-  /*
-   * parseArgs: Parses the args and return a 
-   * 
-   */ 
-
-  appConfig config;
-
-  for (int i = 1; i < argc; i++) 
-  {
-
-    /*
-     * NOTE: I do a simple if else cases since the project is simple.
-     * In the future, if there is too much options, use a unordered map. -SF
-     * 
-     */
-
-    std::string arg = argv[i];
-
-    if (arg == "--version" || arg == "-v")
+  
+  private:
+    appConfig& receiver;
+  
+  public:
+    versionCommand(appConfig& config) : receiver(config) {}
+    void execute(int& i, int argc, char* argv[]) override
     {
-      std::cout << config.projectName << " Version " << config.projectVersion << std::endl;
-      config.justVersionName = true;
+      std::cout << receiver.projectName << " Version " << receiver.projectVersion << std::endl;
+      receiver.justVersionName = true;
     }
 
-    else if (arg == "--test" || arg == "-t")
+};
+
+class testModeCommand : public ICommand 
+{
+  
+  private:
+    appConfig& receiver;
+  
+  public:
+    testModeCommand(appConfig& config) : receiver(config) {}
+    void execute(int& i, int argc, char* argv[]) override 
     {
-      config.testMode = true;
+      receiver.testMode = true;
     }
+};
 
-    else if (arg == "--headless" || arg == "-hl") 
+class headlessCommand : public ICommand 
+{
+  private:
+    appConfig& receiver;
+  public:
+    headlessCommand(appConfig& config) : receiver(config) {}
+    void execute(int& i, int argc, char* argv[]) override
     {
-      config.headlessMode = true;
+      receiver.headlessMode = true;
     }
+};
 
-    else if (arg == "--volume") 
-    {
-      if (i + 1 < argc) 
-      {
-        try 
-        {
-          config.initialVolume = std::stof(argv[i + 1]);
-          i++;
-        }
+class volumeCommand : public ICommand
+{
+  private:
+    appConfig& receiver;
 
-        catch (const std::out_of_range& e) 
-        {
-          std::cout << "Error: Volume number is too large or small" << std::endl;
-        }
-
-        catch (const std::invalid_argument& e) 
-        {
-          std::cout << "Error: Invalid volume. Must be a number" << std::endl;
-          std::cout << "Usage: " << config.projectName << " --volume {0.0f - 1.0f}" << std::endl;
-        }
-      }
-      else
-      {
-        std::cout << "Error: --volume requires a value.\n";
-        std::cout << "Usage: " << config.projectName << " --volume {0.0f - 1.0f}" << std::endl;
-      }
-    }
-
-    else if (arg == "--path" || arg == "-p") 
+  public:
+    volumeCommand(appConfig& config) : receiver(config) {}
+    void execute(int& i, int argc, char* argv[]) override
     {
       if (i + 1 < argc)
       {
-        std::string inputPath = argv[i + 1];
-
-        if (fs::exists(inputPath)) 
+        try
         {
-          if (fs::is_directory(inputPath)) 
-          {
-            config.startingFilePath = inputPath;
-          }
-          else
-          {
-            std::cout << "Error: This path exists, but it is a file, not a folder." << std::endl;
-          }
+          receiver.initialVolume = std::stof(argv[i + 1]);
+          i++;
         }
-        else 
+        catch (const std::exception& e)
         {
-          std::cout << "Error: This path doesn't exist." << std::endl;
+          std::cout << "Error: Invalid volume. Must be a number." << std::endl;
         }
       }
       else
       {
-        std::cout << "Usage: " << config.projectName << " --path {path to music directory}" << std::endl;
+        std::cout << "error: --volume requires a value." << std::endl;
       }
     }
+};
+
+class pathCommand : public ICommand
+{
+  private:
+    appConfig& receiver;
+  public:
+    pathCommand(appConfig& config) : receiver(config) {}
+    void execute(int& i, int argc, char* argv[]) override
+    {
+      if (i + 1 < argc)
+      {
+        std::string inputPath = argv [i + 1];
+        if (fs::exists(inputPath) && fs::is_directory(inputPath))
+        {
+          receiver.startingFilePath = inputPath;
+        }
+        else
+        {
+          std::cout << "Error: Path is invalid or not a directory." << std::endl;
+        }
+        i++;
+      }
+      else
+      {
+        std::cout << "Usage: " << receiver.projectName << " --path {directory}" << std::endl;
+      }
+    }
+};
+
+//Invoker and Client
+appConfig appConfig::parseArgs(int argc, char* argv[])
+{
+  appConfig config;
+
+  std::unordered_map<std::string, std::unique_ptr<ICommand>> commands;
+
+  commands["--version"]     = std::make_unique<versionCommand>(config);
+  commands["-v"]            = std::make_unique<versionCommand>(config);
+
+  commands["--test"]        = std::make_unique<testModeCommand>(config);
+  commands["-t"]            = std::make_unique<testModeCommand>(config);
+
+  commands["--headless"]    = std::make_unique<headlessCommand>(config);
+  commands["-hl"]          = std::make_unique<headlessCommand>(config);
+
+  commands["--volume"]      = std::make_unique<volumeCommand>(config);
+  commands["-vo"]           = std::make_unique<volumeCommand>(config);
+
+  commands["--path"]        = std::make_unique<pathCommand>(config);
+  commands["-p"]            = std::make_unique<pathCommand>(config);
+
+  for (int i = 1; i < argc; i++)
+  {
+    std::string arg = argv[i];
+    auto it = commands.find(arg);
+
+    if (it != commands.end()) { it->second->execute(i, argc, argv); }
+    else { std::cout << "warning: Unknown argument '" << arg << "'" << std::endl; }
   }
 
   return config;
