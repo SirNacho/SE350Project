@@ -35,13 +35,13 @@ std::vector<std::string> getMusicFilesInDirectory(const std::string& inputPath)
     std::cout << "Error: Invalid directory path provided." << std::endl;
     return musicFiles;
   }
-
-  for (const auto& entry : fs::directory_iterator(currentPath))
+  
+  for (const auto& entry : fs::recursive_directory_iterator(currentPath))
   {
     std::string currentPathStr = entry.path().string();
 
     if (isSupportedAudioFile(currentPathStr)) { musicFiles.push_back(currentPathStr); }
   }
-
+   
   return musicFiles;
 }
