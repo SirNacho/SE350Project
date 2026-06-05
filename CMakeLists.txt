@@ -1,55 +1,64 @@
 cmake_minimum_required(VERSION 3.20)
-project(SE350Engine VERSION 1.1)
+project(crisp VERSION 1.4)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-set(SDL_SHARED OFF CACHE BOOL "" FORCE)
-set(SDL_STATIC ON CACHE BOOL "" FORCE)
-set(SDL_TEST OFF CACHE BOOL "" FORCE)
+# Tell CMake to tolerate old submodules
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5 CACHE STRING "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 
+add_compile_options(-Wno-error=maybe-uninitialized)
+add_subdirectory(lib/libclipboard)
 
-#Checks if git submodules existed
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lib/sdl3/CMakeLists.txt")
-    add_subdirectory(lib/sdl3)
+# Checks if glfw submodule exists
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/CMakeLists.txt")
+    add_subdirectory(lib/glfw)
 else()
-    message(FATAL_ERROR "SDL3 not found! Run: git submodule update --init --recursive")
+    message(FATAL_ERROR "GLFW not found! Run: git submodule update --init --recursive")
 endif()
 
-set(IMGUI_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/imgui")
-set(IMGUI_SOURCES
-    "${IMGUI_DIR}/imgui.cpp"
-    "${IMGUI_DIR}/imgui_draw.cpp"
-    "${IMGUI_DIR}/imgui_tables.cpp"
-    "${IMGUI_DIR}/imgui_widgets.cpp"
-    "${IMGUI_DIR}/backends/imgui_impl_sdl3.cpp"
-    "${IMGUI_DIR}/backends/imgui_impl_sdlrenderer3.cpp"
-)
-
-#Adding all cpp files needed for the program
-add_executable(SE350Engine 
+# Adding all cpp files needed for the program
+add_executable(crisp 
     "src/main.cpp"
     "src/audioEngine.cpp"
     "src/audioTest.cpp"
     "src/appConfig.cpp"
     "src/pathFileHelper.cpp"
-    ${IMGUI_SOURCES}
+    "src/thumbnailHelper.cpp"
+    "lib/leif/leif.c"
+    "lib/leif/vendor/glad/src/glad.c"
 )
 
-#Adding the external libraries and headers in include
-target_include_directories(SE350Engine PRIVATE 
+target_compile_definitions(crisp PRIVATE LF_GLFW)
+
+set_source_files_properties("lib/leif/leif.c" PROPERTIES COMPILE_FLAGS "-O3 -ffast-math")
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/lib/leif/.leif" DESTINATION "$ENV{HOME}")
+
+# Adding the external libraries and headers
+target_include_directories(crisp PRIVATE 
+    "${TAGLIB_INCLUDE_DIRS}"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/stb"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/miniaudio"
-    "${IMGUI_DIR}"
-    "${IMGUI_DIR}/backends"
-    "${CMAKE_CURRENT_SOURCE_DIR}/lib/sdl3/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/glfw/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/cglm/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/leif/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/leif/vendor/glad/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/libclipboard/include"
+    "${CMAKE_CURRENT_BINARY_DIR}/lib/libclipboard/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
 
-#Added SDL3 and threading
-target_link_libraries(SE350Engine PRIVATE 
-    SDL3::SDL3-static
+find_package(OpenGL REQUIRED)
+
+# Link the libraries
+target_link_libraries(crisp PRIVATE 
+    glfw
+    clipboard
+    OpenGL::GL
     pthread
     dl
     m
+    tag
 )

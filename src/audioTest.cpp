@@ -8,8 +8,6 @@
 namespace fs = std::filesystem;
 
 //External Libraries
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
 #include <string>
 #include "miniaudio.h"
 
