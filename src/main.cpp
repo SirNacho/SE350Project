@@ -2,6 +2,7 @@
 #include <atomic> //Note: This is for multi threading
 #include <filesystem>
 #include <string>
+#include <cstdlib>
 
 //define
 #define MINIAUDIO_IMPLEMENTATION
@@ -9,19 +10,20 @@
 namespace fs = std::filesystem;
 
 //External Libraries
-#include <GLFW/glfw3.h>
 
 //Tells the compiler to only use C on leif
 extern "C" {
     #include <leif/leif.h>
 }
-
+#include <GLFW/glfw3.h>
 #include "miniaudio.h"
 
 //Classes I made
 #include "audioEngine.h"
 #include "audioTest.h"
 #include "appConfig.h"
+#include "thumbnailHelper.h"
+#include "pathFileHelper.h"
 
 //Constants
 constexpr int screenWidth = 640;
@@ -39,23 +41,61 @@ int main(int argc, char* argv[])
     audioTest();
     return EXIT_SUCCESS;
   }
-  
+
+  std::string finalMusicPath = "";
+
+  if (config.startingFilePath.empty())
+  {
+    const char* homeEnv = std::getenv("HOME");
+
+    if (homeEnv == nullptr) 
+    {
+      homeEnv = std::getenv("USERPROFILE");
+    }
+
+    if (homeEnv != nullptr) 
+    {
+      fs::path musicPath = fs::path(homeEnv) / "Music";
+      
+      if (!fs::exists(musicPath) || !fs::is_directory(musicPath))
+      {
+        std::cerr << "Error: Default music directory not found at " << musicPath << std::endl;
+        return EXIT_FAILURE;
+      }
+      
+      finalMusicPath = musicPath.string(); 
+    }
+    else 
+    {
+      std::cerr << "Error: Unable to get the home directory." << std::endl;
+      return EXIT_FAILURE;
+    }
+  }
+  else
+  {
+    finalMusicPath = config.startingFilePath;
+  }
+   
   //Audio Engine Setup
   audioEngine& engine = audioEngine::getInstance();
-  
+
   //Leif (GUI) Setup
   
   if (!glfwInit()) 
   {
     std::cerr << "Failed to initialize gui *GLFW" << std::endl;
-    return EXIT_FAILURE; // Exit the program if graphics fail
+    return EXIT_FAILURE; 
   }
   
-  // If we made it here, GLFW initialized successfully! Create the window.
-  GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "Hello", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "crisp", NULL, NULL);
   glfwMakeContextCurrent(window);
 
   lf_init_glfw(screenWidth, screenHeight, window);
+  
+  
+  //Fetching directory and all music files in said directory.
+  std::string pathText = "I'm currently in: " + finalMusicPath;
+  std::vector<std::string> musicFiles = getMusicFilesInDirectory(finalMusicPath);
 
   while(!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -64,7 +104,27 @@ int main(int argc, char* argv[])
     lf_begin();
 
     lf_text("Hello, SE350!");
+    lf_next_line();
+    lf_text(pathText.c_str());
+    lf_next_line();
+    lf_text("Available Tracks:");
+    lf_next_line();
 
+    if (musicFiles.empty()) 
+    {
+      lf_text("No supported audio files can be found.");
+    }
+    else 
+    {
+      for (const std::string& filePath : musicFiles) 
+      {
+        std::string fileName = fs::path(filePath).filename().string();
+
+        lf_text(fileName.c_str());
+        lf_next_line();
+      }
+    }
+    
     lf_end();
     glfwSwapBuffers(window);
     glfwPollEvents();
