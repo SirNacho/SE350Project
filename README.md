@@ -1,11 +1,11 @@
-# SE 350 Project
+# Crisp (A C++ Music Player GUI App)
 [![build and test](https://github.com/SirNacho/SE350Project/actions/workflows/build.yml/badge.svg)](https://github.com/SirNacho/SE350Project/actions/workflows/build.yml)
 
 | Hi, welcome to my git repo for my SE 350 project!
 - Note: Sprint3 related information will be at the bottom of the readme.md.
 
 # Setup:
-- Frontend: ImGui
+- Frontend: Leif
 - Programming Language: C++
 
 # Requirements:
@@ -15,11 +15,19 @@
 
 ## Libraries Used (subject to Change):
 -  miniaudio
--  sdl3
--  imgui
+-  glfw
+-  leif
 -  stb
+-  libclipboard
+-  cglm
 
 # How to Run:
+Install the required dependencies:
+Ubuntu:
+```
+sudo apt-get update && sudo apt-get install -y build-essential cmake libtag1-dev libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libxkbcommon-dev libasound2-dev libpulse-dev
+```
+
 git clone the repo:
 ```
 git clone --recursive https://github.com/SirNacho/SE350Project.git
@@ -44,9 +52,9 @@ Then build using make:
 ```
 make
 ```
-Finally, move the executable to the root of the project:
+Finally, move the executable to the root of the project (optional if you want to test the program):
 ```
-mv SE350Engine ..
+mv crisp ..
 ```
 
 # Testing the program:
@@ -55,23 +63,30 @@ If you want to debug and figure out whether the program can play a music.
 - Then, place the mp3 files to src/assets
 - Finally, run the test command:
 ```
-./SE350Engine --test
+./crisp --test
 ```
 
 # Usage:
-To get the version, run this command:
+To start the program with default setting:
 ```
-./SE350Engine --version
+./crisp
+```
+To start the program on a different directory:
+```
+./crisp --path {directory}
+```
+To get the version:
+```
+./crisp --version
 ```
 To test the program, run the program at the root of the repo and run the command:
 ```
-./SE350Engine --test
+./crisp --test
 ```
 
 
 # To-Do List:
 - Implement more strategies like repeat strategies
-- Implement a GUI using imgui or SDL3
 - Implement a TUI (optional)
 - Create UI for GUI
 - Check for memory leaks at the end
@@ -84,5 +99,4 @@ I wanted to show a simple GUI music player app that shuffles or plays music. I'm
 ### Any problem I have with implementing design patterns that was keeping me from reaching the goal?
 ```
 While one of the design patterns like Singleton pattern is easier to work with, the strategy pattern was more difficult. The strategy pattern is a little weird since I used concreteStrategies.h to be the interface and I put the actual algorithm in playBackStrategy.h. I don't have a lot of experience prior to the course on interface so it felt a little weird to me but I learned it's advantages like overwriting nextTrack() depending on the strategies used.
-
 ```
