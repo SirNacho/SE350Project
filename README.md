@@ -1,9 +1,8 @@
 # Crisp (A C++ Music Player GUI App)
 [![build and test](https://github.com/SirNacho/SE350Project/actions/workflows/build.yml/badge.svg)](https://github.com/SirNacho/SE350Project/actions/workflows/build.yml)
 
-<"Insert Image Of The Final Version Of The Working App Here">
+<img src="src/assets/images/appImage.png" alt="Alternative description text" width="500">
 
-Hi, welcome to my git repo for my SE 350 project!
 - Note: Final submission information will be at the bottom of the readme.md.
 
 # Setup:
