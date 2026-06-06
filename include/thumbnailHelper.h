@@ -1,8 +1,7 @@
 #pragma once
 #include <string>
 
-extern "C" 
-{
+extern "C" {
 #include <leif/leif.h>
 }
 

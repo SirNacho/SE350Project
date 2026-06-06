@@ -6,11 +6,13 @@ on:
       - main
       - sprint3
       - sprint4
+      - sprint5
   pull_request:
     branches: 
       - main
       - sprint3
       - sprint4
+      - sprint5
 
 jobs:
   build:
