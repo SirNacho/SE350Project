@@ -6,7 +6,7 @@
 
 # Setup:
 - Frontend: Leif
-- Programming Language: C++
+- Programming Language: C/C++
 
 # Requirements:
 - Hosts: Linux on X86 (Ubuntu Is Recommended)
@@ -23,7 +23,7 @@
 
 # How to Run:
 Install the required dependencies:
-Ubuntu:
+- Ubuntu:
 ```
 sudo apt-get update && sudo apt-get install -y build-essential cmake libtag1-dev libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libxkbcommon-dev libasound2-dev libpulse-dev
 ```
@@ -52,7 +52,7 @@ Then build using make:
 ```
 make
 ```
-Finally, move the executable to the root of the project (optional if you want to test the program):
+(optional if you want to test the program) Move the executable to the root of the project:
 ```
 mv crisp ..
 ```
