@@ -24,10 +24,37 @@ extern "C" {
 #include "appConfig.h"
 #include "thumbnailHelper.h"
 #include "pathFileHelper.h"
+#include "IObserver.h"
 
 //Constants
 constexpr int screenWidth = 640;
 constexpr int screenHeight = 480;
+
+class UIController : public IObserver 
+{
+  private:
+    audioEngine& engine;
+
+  public:
+    std::atomic<bool> trackStateChanged{false};
+
+    UIController(audioEngine& eng) : engine(eng) 
+    {
+      engine.attach(this);
+    }
+
+    ~UIController()
+    {
+      engine.detach(this);
+    }
+    
+    void update() override
+    {
+      //Note: this flips the flag and get out of the background thread.
+      trackStateChanged = true;
+    }
+};
+
 
 int main(int argc, char* argv[])
 {
@@ -78,6 +105,8 @@ int main(int argc, char* argv[])
    
   //Audio Engine Setup
   audioEngine& engine = audioEngine::getInstance();
+  
+  UIController ui(engine);
 
   //Leif (GUI) Setup
   
@@ -98,6 +127,22 @@ int main(int argc, char* argv[])
   std::vector<std::string> musicFiles = getMusicFilesInDirectory(finalMusicPath);
 
   while(!glfwWindowShouldClose(window)) {
+
+    if (ui.trackStateChanged)
+    {
+      if (!engine.isPlaying())
+      {
+        std::cout <<"\nTrack has finished or stopped, ready for the next song." << std::endl;
+      }
+      else
+      {
+        std::cout << "\n A new track started playing." << std::endl;
+      }
+
+      ui.trackStateChanged = false;
+    }
+
+
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 

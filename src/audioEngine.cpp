@@ -1,5 +1,14 @@
 #include "audioEngine.h"
 #include <iostream>
+#include <algorithm>
+
+//Acts as a trigger that fires automatically when a song finishes.
+void soundEndCallback(void* pUserData, ma_sound* pSound)
+{
+  audioEngine* engine = static_cast<audioEngine*>(pUserData);
+
+  engine->handleSoundEnd();
+}
 
 audioEngine& audioEngine::getInstance()
 {
@@ -27,6 +36,33 @@ bool audioEngine::init()
   return true;
 }
 
+//observer pattern implementation section:
+void audioEngine::attach(IObserver* observer)
+{
+  observers.push_back(observer);
+}
+
+void audioEngine::detach(IObserver* observer)
+{
+  observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
+}
+
+void audioEngine::notifyObservers()
+{
+  for (IObserver* obs : observers)
+  {
+    obs->update();
+  }
+}
+
+void audioEngine::handleSoundEnd()
+{
+  mSoundLoaded = false;
+  notifyObservers();
+}
+
+
+//audio controls section:
 void audioEngine::playFile(const std::string& pwd) 
 {
   if (!m_isIntialized) return;
@@ -52,7 +88,13 @@ void audioEngine::playFile(const std::string& pwd)
   if (result == MA_SUCCESS) 
   {
     mSoundLoaded = true;
+
+    ma_sound_set_end_callback(&mCurrentSound, soundEndCallback, this);
+
     ma_sound_start(&mCurrentSound);
+    
+    //let the UI (Leif) know that a new song has started playing.
+    notifyObservers();
   }
   else
   {
@@ -65,7 +107,11 @@ void audioEngine::stop()
   if (m_isIntialized && mSoundLoaded)
   {
     ma_sound_stop(&mCurrentSound);
+    mSoundLoaded = false;
     std::cout << "Playback stopped." << std::endl;
+
+    //Let the UI know that playback was manually stop.
+    notifyObservers();
   }
 }
 
