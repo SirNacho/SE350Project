@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <atomic>
 #include "miniaudio.h"
 #include "ISubject.h"
 
@@ -20,14 +21,17 @@ class audioEngine : public ISubject
 
     void playFile(const std::string& pwd);
     void stop();
+    void togglePlayPause();
+    bool isAudioPlaying();
+    void handleSoundEnd();
+    int getPlaybackPosition();
+    void setPlaybackPosition(int seconds);
 
     void attach(IObserver* observer) override;
     void detach(IObserver* observer) override;
     void notifyObservers() override;
 
-    bool isPlaying() const { return mSoundLoaded; }
-    
-    void handleSoundEnd();
+    bool isTrackLoaded() const { return mSoundLoaded; }
 
   private:
     std::vector<IObserver*> observers;
@@ -40,7 +44,7 @@ class audioEngine : public ISubject
     bool m_isIntialized = false;
 
     ma_sound mCurrentSound;
-    bool mSoundLoaded = false;
+    std::atomic<bool> mSoundLoaded{false};
 
     //Note: To delete copy constructor and assignment operator to enforce Singleton pattern.
     audioEngine(const audioEngine&) = delete;

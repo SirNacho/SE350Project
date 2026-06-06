@@ -57,7 +57,6 @@ void audioEngine::notifyObservers()
 
 void audioEngine::handleSoundEnd()
 {
-  mSoundLoaded = false;
   notifyObservers();
 }
 
@@ -92,14 +91,51 @@ void audioEngine::playFile(const std::string& pwd)
     ma_sound_set_end_callback(&mCurrentSound, soundEndCallback, this);
 
     ma_sound_start(&mCurrentSound);
-    
-    //let the UI (Leif) know that a new song has started playing.
-    notifyObservers();
   }
   else
   {
     std::cout << "Error: Miniaudio has failed to load the sound file." << std::endl;
   }
+}
+
+void audioEngine::togglePlayPause()
+{
+  //Checks if no song is loaded
+  if (!mSoundLoaded) { return; }
+
+  if(ma_sound_is_playing(&mCurrentSound)) { ma_sound_stop(&mCurrentSound); }
+  else { ma_sound_start(&mCurrentSound); }
+}
+
+bool audioEngine::isAudioPlaying() 
+{
+  if (!mSoundLoaded) { return false; }
+  return ma_sound_is_playing(&mCurrentSound);
+}
+
+int audioEngine::getPlaybackPosition()
+{
+  if (!mSoundLoaded) { return 0; }
+
+  ma_uint64 cursorFrames;
+  ma_sound_get_cursor_in_pcm_frames(&mCurrentSound, &cursorFrames);
+
+  ma_uint32 sampleRate;
+  ma_sound_get_data_format(&mCurrentSound, NULL, NULL, &sampleRate, NULL, 0);
+
+  if(sampleRate == 0) { return 0; }
+  return (int)(cursorFrames / sampleRate);
+}
+
+void audioEngine::setPlaybackPosition(int seconds)
+{
+  if (!mSoundLoaded) { return; }
+
+  ma_uint32 sampleRate;
+  ma_sound_get_data_format(&mCurrentSound, NULL, NULL, &sampleRate, NULL, 0);
+
+  ma_uint64 targetFrame = (ma_uint64)seconds * sampleRate;
+  ma_sound_seek_to_pcm_frame(&mCurrentSound, targetFrame);
 }
 
 void audioEngine::stop()
