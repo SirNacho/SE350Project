@@ -86,17 +86,19 @@ To test the program, run the program at the root of the repo and run the command
 
 
 # To-Do List:
-- Implement more strategies like repeat strategies
 - Implement a TUI (optional)
 - Create UI for GUI
+- Sketch some pixel art UI for the buttons
+- Use a different font for the music player
 - Check for memory leaks at the end
 
-# Sprint 3:
+# Sprint 5:
 ### What do I want to show for my final submission?
 ```
 I wanted to show a simple GUI music player app that shuffles or plays music. I'm hoping to go with a pixel art UI.
 ```
 ### Any problem I have with implementing design patterns that was keeping me from reaching the goal?
 ```
-While one of the design patterns like Singleton pattern is easier to work with, the strategy pattern was more difficult. The strategy pattern is a little weird since I used concreteStrategies.h to be the interface and I put the actual algorithm in playBackStrategy.h. I don't have a lot of experience prior to the course on interface so it felt a little weird to me but I learned it's advantages like overwriting nextTrack() depending on the strategies used.
+I feel like implementing the observer pattern did keep me from reaching my goal. I feel this way because although I wanted to find a way to save CPU resources by
+not having to relie on a while loop for the audioEngine. I did spend a good while debugging why the UI would immiediately load the next track again and again until it crashed.
 ```
