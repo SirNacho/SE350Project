@@ -95,7 +95,7 @@ To test the program, run the program at the root of the repo and run the command
 
 # Final Submission Related Info:
 
-## List of Design Patterns Used And There Location:
+## List of Design Patterns Used And Their Location:
 - Singleton Pattern (include/audioEngine.h and src/audioEngine.cpp)
 - Observer Pattern (src/audioEngine.cpp and src/main.cpp)
 - Command Pattern (src/appConfig.cpp)

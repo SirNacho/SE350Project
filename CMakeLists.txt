@@ -27,6 +27,8 @@ add_executable(crisp
     "src/pathFileHelper.cpp"
     "src/thumbnailHelper.cpp"
     "src/metaDataHelper.cpp"
+    "src/nowPlayingState.cpp"
+
     "lib/leif/leif.c"
     "lib/leif/vendor/glad/src/glad.c"
 
