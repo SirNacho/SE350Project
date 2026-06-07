@@ -75,40 +75,18 @@ int main(int argc, char* argv[])
     return EXIT_SUCCESS;
   }
 
-  std::string finalMusicPath = "";
+  std::string finalMusicPath = config.startingFilePath;
 
-  if (config.startingFilePath.empty())
+  if (finalMusicPath.empty()) 
   {
-    const char* homeEnv = std::getenv("HOME");
-
-    if (homeEnv == nullptr) 
+    finalMusicPath = getDefaultMusicDirectory();
+    if (finalMusicPath.empty()) 
     {
-      homeEnv = std::getenv("USERPROFILE");
-    }
-
-    if (homeEnv != nullptr) 
-    {
-      fs::path musicPath = fs::path(homeEnv) / "Music";
-      
-      if (!fs::exists(musicPath) || !fs::is_directory(musicPath))
-      {
-        std::cerr << "Error: Default music directory not found at " << musicPath << std::endl;
-        return EXIT_FAILURE;
-      }
-      
-      finalMusicPath = musicPath.string(); 
-    }
-    else 
-    {
-      std::cerr << "Error: Unable to get the home directory." << std::endl;
+      std::cerr << "Error: Couldn't determine the User's music directory. (Maybe ~/Music doesn't exist?)" << std::endl;
       return EXIT_FAILURE;
     }
   }
-  else
-  {
-    finalMusicPath = config.startingFilePath;
-  }
-   
+
   //Audio Engine Setup
   audioEngine& engine = audioEngine::getInstance();
   

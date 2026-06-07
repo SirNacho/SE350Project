@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+std::string getDefaultMusicDirectory();
+
 bool checkAudioPath(const std::string& inputPath);
 
 bool isSupportedAudioFile(const std::string& inputPath);
