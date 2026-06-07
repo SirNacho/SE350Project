@@ -29,6 +29,7 @@ extern "C" {
 #include "concreteStrategies.h"
 #include "UIContext.h"
 #include "nowPlayingState.h"
+#include "IPlaybackCreator.h"
 
 
 class UIController : public IObserver 
@@ -40,10 +41,10 @@ class UIController : public IObserver
   public:
     std::atomic<bool> trackStateChanged{false};
 
-    UIController(audioEngine& eng, const std::string& musicPath) : engine(eng) 
+    UIController(audioEngine& eng, std::unique_ptr<IPlaybackCreator> crt, const std::string& musicPath) : engine(eng) 
     {
       engine.attach(this);
-      strategy = std::make_unique<sequentialPlaybackStrategy>(musicPath);
+      strategy = crt->create(musicPath);
     }
 
     ~UIController()
@@ -64,6 +65,8 @@ int main(int argc, char* argv[])
 {
   //Getting configuration based on arguments
   appConfig config = appConfig::parseArgs(argc, argv);
+  //Created strategyCreator to get argument on playlist mode.
+  std::unique_ptr<IPlaybackCreator> strategyCreator;
 
   if (config.justVersionName) { return EXIT_SUCCESS; }
 
@@ -73,8 +76,19 @@ int main(int argc, char* argv[])
     return EXIT_SUCCESS;
   }
 
-  std::string finalMusicPath = config.startingFilePath;
+  if (config.shufflePlayback)
+  {
+    std::cout << "Started in shuffle playlist." << std::endl;
+    strategyCreator = std::make_unique<shuffleCreator>();
+  }
+  else
+  {
+    std::cout << "Started in sequential playlist." << std::endl;
+    strategyCreator = std::make_unique<sequentialCreator>();
+  }
 
+  std::string finalMusicPath = config.startingFilePath;
+  
   if (finalMusicPath.empty()) 
   {
     finalMusicPath = getDefaultMusicDirectory();
@@ -89,8 +103,10 @@ int main(int argc, char* argv[])
   audioEngine& engine = audioEngine::getInstance();
   
   //UI Setup
-  UIController ui(engine, finalMusicPath);
-  
+
+
+
+  UIController ui(engine, std::move(strategyCreator), finalMusicPath);
   UIContext uiContext(engine);
   
   //Leif (GUI) Setup

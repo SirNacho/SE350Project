@@ -7,6 +7,7 @@ struct appConfig
 {
   //Profile Settings
   std::string startingFilePath = "";
+  bool shufflePlayback = false;
   float initialVolume = 1.0f;
   bool headlessMode = false;
   bool justVersionName = false; //Seems inefficent but I'll fix it later. -SF
