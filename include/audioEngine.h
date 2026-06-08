@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <atomic>
+
 #include "miniaudio.h"
 #include "ISubject.h"
 
@@ -14,11 +15,10 @@ class audioEngine : public ISubject
    * a while loop for the engine in main.cpp. -SF
    * */
   
-  
-
   public:
     static audioEngine& getInstance();
-
+    
+    //Functions that handles how the engine should play or handles music.
     void playFile(const std::string& pwd);
     void stop();
     void togglePlayPause();
@@ -27,6 +27,7 @@ class audioEngine : public ISubject
     int getPlaybackPosition();
     void setPlaybackPosition(int seconds);
 
+    //observers implementation.
     void attach(IObserver* observer) override;
     void detach(IObserver* observer) override;
     void notifyObservers() override;
@@ -37,6 +38,7 @@ class audioEngine : public ISubject
     std::vector<IObserver*> observers;
 
     //Note: This is so that the program won't access miniaudio except for this class.
+    //(Based on Singleton pattern)
     audioEngine();
     ~audioEngine();
 

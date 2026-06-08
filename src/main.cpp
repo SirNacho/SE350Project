@@ -10,6 +10,7 @@ namespace fs = std::filesystem;
 
 //External Libraries
 #include <GLFW/glfw3.h>
+#include <stb_image.h>
 #include "miniaudio.h"
 
 //Tells the compiler to only use C on leif
@@ -32,6 +33,7 @@ extern "C" {
 #include "IPlaybackCreator.h"
 
 
+//UIController (based on observer pattern implementation)
 class UIController : public IObserver 
 {
   private:
@@ -58,6 +60,7 @@ class UIController : public IObserver
     }
     
     std::string getNextTrack() { return strategy->getNextTrack(); }
+    std::string getPrevTrack() { return strategy->getPrevTrack(); }
 };
 
 
@@ -65,17 +68,23 @@ int main(int argc, char* argv[])
 {
   //Getting configuration based on arguments
   appConfig config = appConfig::parseArgs(argc, argv);
+
   //Created strategyCreator to get argument on playlist mode.
   std::unique_ptr<IPlaybackCreator> strategyCreator;
-
+  
+  //Applied the configurations from config. Note: Implement a way to also load profiles using JSON or other formats.
+  
+  //Fetching version only.
   if (config.justVersionName) { return EXIT_SUCCESS; }
 
+  //Starts in test mode.
   if (config.testMode) 
   {
     audioTest();
     return EXIT_SUCCESS;
   }
-
+  
+  //Starts in shuffle or sequential playback.
   if (config.shufflePlayback)
   {
     std::cout << "Started in shuffle playlist." << std::endl;
@@ -87,6 +96,7 @@ int main(int argc, char* argv[])
     strategyCreator = std::make_unique<sequentialCreator>();
   }
 
+  //fetching the directory containing the music by default or by given path.
   std::string finalMusicPath = config.startingFilePath;
   
   if (finalMusicPath.empty()) 
@@ -103,14 +113,10 @@ int main(int argc, char* argv[])
   audioEngine& engine = audioEngine::getInstance();
   
   //UI Setup
-
-
-
   UIController ui(engine, std::move(strategyCreator), finalMusicPath);
   UIContext uiContext(engine);
   
   //Leif (GUI) Setup
-  
   if (!glfwInit()) 
   {
     std::cerr << "Failed to initialize gui *GLFW" << std::endl;
@@ -120,8 +126,27 @@ int main(int argc, char* argv[])
   GLFWwindow* window = glfwCreateWindow(uiContext.screenWidth, uiContext.screenHeight, "crisp", NULL, NULL);
   glfwMakeContextCurrent(window);
 
-  lf_init_glfw(uiContext.screenWidth, uiContext.screenHeight, window);
+  //Crisp Logo Setup:
+  GLFWimage images[1];
+  int channels;
+
+  images[0].pixels = stbi_load("src/assets/images/logo.png", &images[0].width, &images[0].height, &channels, 4);
   
+  //This checks for the global install path if installed on the system.
+  if (!images[0].pixels) 
+  {
+    images[0].pixels = stbi_load("/usr/local/share/icons/hicolor/512x512/apps/crisp.png", &images[0].width, &images[0].height, &channels, 4);
+  }
+
+  if(images[0].pixels)
+  {
+    glfwSetWindowIcon(window, 1, images);
+    stbi_image_free(images[0].pixels);
+  }
+  else { std::cout << "Warning: The app icon could not be loaded." << std::endl; }
+
+
+  lf_init_glfw(uiContext.screenWidth, uiContext.screenHeight, window);
   
   //Fetching directory and all music files in said directory.
   std::string pathText = "I'm currently in: " + finalMusicPath;
@@ -135,14 +160,27 @@ int main(int argc, char* argv[])
     engine.playFile(firstTrack);
   }
 
-
   uiContext.currentTrack = currentTrack;
   uiContext.changeState(std::make_unique<nowPlayingState>());
 
   //glfw ui loop
   while(!glfwWindowShouldClose(window)) {
 
-    if (ui.trackStateChanged)
+    //Gets the current window size and makes the UI center based on current window size.
+    int currentWidth, currentHeight;
+    glfwGetWindowSize(window, &currentWidth, &currentHeight);
+    
+    uiContext.screenWidth = currentWidth;
+    uiContext.screenHeight = currentHeight;
+
+    int fbWidth, fbHeight;
+    glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
+
+    glViewport(0, 0, fbWidth, fbHeight);
+    lf_resize_display(currentWidth, currentHeight);    
+
+    // Handles auto-skipping or manual skip the track.
+    if (ui.trackStateChanged || uiContext.requestNext)
     {
       std::cout << "Track has finished or skipped, ready for the next song." << std::endl;
 
@@ -155,6 +193,20 @@ int main(int argc, char* argv[])
       }
 
       ui.trackStateChanged = false;
+      uiContext.requestNext = false;
+    }
+
+    //Handles a manual input to put the previous track.
+    if (uiContext.requestPrev)
+    {
+      std::string prev = ui.getPrevTrack();
+      if(!prev.empty())
+      {
+        uiContext.currentTrack = metaDataHelper::getMetaData(prev);
+        engine.playFile(prev);
+      }
+
+      uiContext.requestPrev = false;
     }
 
     glClear(GL_COLOR_BUFFER_BIT);
@@ -164,16 +216,14 @@ int main(int argc, char* argv[])
     lf_begin();
     uiContext.requestDraw();
     lf_end();
-
+    
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
-
+  
   lf_terminate();
   glfwDestroyWindow(window);
   glfwTerminate();
   
   return EXIT_SUCCESS;
-
 }
-

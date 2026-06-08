@@ -5,8 +5,11 @@
 #include "audioEngine.h"
 #include "metaDataHelper.h"
 
+//Handles the UI of the app using state pattern. 
+//Loads the UI from nowPlayingState.cpp instead of main.cpp.
 class UIContext
 {
+
   private:
     std::unique_ptr<IUIState> state;
 
@@ -14,9 +17,12 @@ class UIContext
     audioEngine& engine;
     metaDataStruct currentTrack;
     
-    const int screenWidth = 768;
-    const int screenHeight = 1050;
+    int screenWidth = 770;
+    int screenHeight = 1050;
     
+    bool requestNext = false;
+    bool requestPrev = false;
+
     UIContext(audioEngine& eng) : engine(eng), state(nullptr) {}
     
     void changeState(std::unique_ptr<IUIState> newState) { state = std::move(newState); }

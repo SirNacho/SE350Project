@@ -6,11 +6,8 @@
 #include <taglib/mpegfile.h>
 #include <taglib/id3v2tag.h>
 #include <taglib/attachedpictureframe.h>
-
 #include <glad/glad.h>
-
 #include <stb_image.h>
-
 #include <iostream>
 
 LfTexture loadMp3Thumbnail(const std::string& filepath) 

@@ -5,6 +5,8 @@
 
 namespace fs = std::filesystem;
 
+//This is where I mostly put directory related functions.
+
 bool checkAudioPath(const std::string& inputPath)
 {
   fs::path currentPath(inputPath);

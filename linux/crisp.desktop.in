@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Crisp
+Comment=A light weight C++ music player
+Exec=crisp
+Icon=@CMAKE_INSTALL_PREFIX@/share/icons/hicolor/512x512/apps/crisp.png
+Terminal=false
+Categories=AudioVideo;Audio;Player;
