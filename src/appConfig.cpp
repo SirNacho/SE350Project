@@ -1,4 +1,5 @@
 #include "appConfig.h"
+
 #include <iostream>
 #include <unordered_map>
 #include <memory>
@@ -6,7 +7,7 @@
 namespace fs = std::filesystem;
 
 /*
- * I rewrote this program cause I don't like how many if statements are there. Looks confusing to implement.
+ * I rewrote this program cause I don't like how many if statements are there. Looks confusing to add new arguments.
  * I will implement the command pattern on this since I feel this is a best pattern to fix this. -SF
  * */
 
@@ -20,6 +21,7 @@ class versionCommand : public ICommand
   
   public:
     versionCommand(appConfig& config) : receiver(config) {}
+    
     void execute(int& i, int argc, char* argv[]) override
     {
       std::cout << receiver.projectName << " Version " << receiver.projectVersion << std::endl;
@@ -36,6 +38,7 @@ class testModeCommand : public ICommand
   
   public:
     testModeCommand(appConfig& config) : receiver(config) {}
+    
     void execute(int& i, int argc, char* argv[]) override 
     {
       receiver.testMode = true;
@@ -48,6 +51,7 @@ class headlessCommand : public ICommand
     appConfig& receiver;
   public:
     headlessCommand(appConfig& config) : receiver(config) {}
+    
     void execute(int& i, int argc, char* argv[]) override
     {
       receiver.headlessMode = true;
@@ -61,6 +65,7 @@ class volumeCommand : public ICommand
 
   public:
     volumeCommand(appConfig& config) : receiver(config) {}
+    
     void execute(int& i, int argc, char* argv[]) override
     {
       if (i + 1 < argc)
@@ -88,6 +93,7 @@ class pathCommand : public ICommand
     appConfig& receiver;
   public:
     pathCommand(appConfig& config) : receiver(config) {}
+    
     void execute(int& i, int argc, char* argv[]) override
     {
       if (i + 1 < argc)
@@ -107,6 +113,19 @@ class pathCommand : public ICommand
       {
         std::cout << "Usage: " << receiver.projectName << " --path {directory}" << std::endl;
       }
+    }
+};
+
+class shuffleCommand : public ICommand 
+{
+  private:
+    appConfig& receiver;
+  public:
+    shuffleCommand(appConfig& config) : receiver(config) {}
+    
+    void execute(int& i, int argc, char* argv[]) override
+    {
+      receiver.shufflePlayback = true;
     }
 };
 
@@ -131,6 +150,9 @@ appConfig appConfig::parseArgs(int argc, char* argv[])
 
   commands["--path"]        = std::make_unique<pathCommand>(config);
   commands["-p"]            = std::make_unique<pathCommand>(config);
+
+  commands["--shuffle"]     = std::make_unique<shuffleCommand>(config);
+  commands["-s"]            = std::make_unique<shuffleCommand>(config);
 
   for (int i = 1; i < argc; i++)
   {

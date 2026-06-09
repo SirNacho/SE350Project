@@ -7,4 +7,5 @@ class playBackStrategy
     virtual ~playBackStrategy() = default;
     
     virtual std::string getNextTrack() = 0;
+    virtual std::string getPrevTrack() = 0;
 };

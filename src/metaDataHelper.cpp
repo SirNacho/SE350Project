@@ -1,5 +1,6 @@
 #include "metaDataHelper.h"
 #include "thumbnailHelper.h"
+
 #include <taglib/fileref.h>
 #include <taglib/tag.h>
 #include <taglib/audioproperties.h>

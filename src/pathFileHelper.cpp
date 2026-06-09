@@ -5,6 +5,8 @@
 
 namespace fs = std::filesystem;
 
+//This is where I mostly put directory related functions.
+
 bool checkAudioPath(const std::string& inputPath)
 {
   fs::path currentPath(inputPath);
@@ -44,4 +46,24 @@ std::vector<std::string> getMusicFilesInDirectory(const std::string& inputPath)
   }
    
   return musicFiles;
+}
+
+
+//Note: Although Crisp doesn't have windows support, I thought to check for windows
+//directory anyway in case I do support windows some day. -SF
+std::string getDefaultMusicDirectory() 
+{
+  const char* homeEnv = std::getenv("HOME");
+  if (homeEnv == nullptr) { homeEnv = std::getenv("USERPROFILE"); }
+
+  if (homeEnv != nullptr) 
+  {
+    fs::path musicPath = fs::path(homeEnv) / "Music";
+    if (fs::exists(musicPath) && fs::is_directory(musicPath)) 
+    {
+      return musicPath.string();
+    }
+  }
+
+  return "";
 }

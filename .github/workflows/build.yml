@@ -1,4 +1,4 @@
-name: SE350 Engine Build
+name: Crisp Build
 
 on:
   push:
@@ -7,12 +7,14 @@ on:
       - sprint3
       - sprint4
       - sprint5
+      - finalSub
   pull_request:
     branches: 
       - main
       - sprint3
       - sprint4
       - sprint5
+      - finalSub
 
 jobs:
   build:
