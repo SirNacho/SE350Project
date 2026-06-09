@@ -121,10 +121,12 @@ shuffle logic so that the app can be able to switch between sequential and shuff
 - Being able to tell if the ~/Music directory is empty or not. It was a oversight.
 - You can't re-shuffle the playlist in the middle of the sequential playback.
 - The UI is bare bones and could use some UI changes.
+- The ability to install the app using 'make install' was incomplete. I don't feel confident in installing at /usr/share/bin.
 
 ## Any notable list of bugs or anything else:
 - There is a slight delay on the pause and play button for the music in some machines.
 - There is also might be a slight glitching on the music when the window gets resized while playing a track.
 - Also, if there is no music on ~/Music directory, it will be a blank screen.
 - There was an issue that I had before where some libraries requires other dependencies that I don't need at the moment like libclipboard.
+- On a similar note, there might be some warnings from cmake about deprecated libraries or warnings about the tests from the libraries but it doesn't impact the program.
 - Although I picked leif for it's easy and portable GUI implementation, it hasn't been updated in two years and I believe I would need to replace that GUI with something else later on.
