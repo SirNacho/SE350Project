@@ -53,6 +53,10 @@ Then build using make:
 ```
 make
 ```
+(Optional) to install the program to the system:
+```
+sudo make install
+```
 (optional if you want to test the program) Move the executable to the root of the project:
 ```
 mv crisp ..
@@ -121,7 +125,6 @@ shuffle logic so that the app can be able to switch between sequential and shuff
 - Being able to tell if the ~/Music directory is empty or not. It was a oversight.
 - You can't re-shuffle the playlist in the middle of the sequential playback.
 - The UI is bare bones and could use some UI changes.
-- The ability to install the app using 'make install' was incomplete. I don't feel confident in installing at /usr/share/bin.
 
 ## Any notable list of bugs or anything else:
 - There is a slight delay on the pause and play button for the music in some machines.
