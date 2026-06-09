@@ -1,11 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(crisp VERSION 1.6)
 
-#Installing to ~/.local for user level installation if not given a set path.
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local" CACHE PATH "Default install prefix" FORCE)
-endif()
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -76,22 +71,22 @@ target_link_libraries(crisp PRIVATE
 
 #Moves the compield executable to the system's binary folder. 
 #(/usr/local/bin for ubuntu for example.)
-#install(TARGETS crisp DESTINATION bin)
+install(TARGETS crisp DESTINATION bin)
 
 # Configures the .desktop file for linux.
-#configure_file(
-#"${CMAKE_SOURCE_DIR}/linux/crisp.desktop.in"
-#"${CMAKE_BINARY_DIR}/crisp.desktop"
-#@ONLY
-#)
+configure_file(
+  "${CMAKE_SOURCE_DIR}/linux/crisp.desktop.in"
+  "${CMAKE_BINARY_DIR}/crisp.desktop"
+  @ONLY
+)
 
 #Install the .desktop file to the system's application directory
-#install(FILES "${CMAKE_BINARY_DIR}/crisp.desktop" 
-#DESTINATION share/applications)
+install(FILES "${CMAKE_BINARY_DIR}/crisp.desktop" 
+  DESTINATION share/applications)
 
 # installs the logo to the system's icon directory to make it easier to find it.
-#install(FILES "src/assets/images/logo.png" 
-#DESTINATION share/icons/hicolor/512x512/apps 
-#RENAME crisp.png)
+install(FILES "src/assets/images/logo.png" 
+  DESTINATION share/icons/hicolor/512x512/apps 
+  RENAME crisp.png)
 
       

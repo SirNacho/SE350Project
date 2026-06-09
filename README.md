@@ -53,6 +53,10 @@ Then build using make:
 ```
 make
 ```
+(Optional) to install the program to the system:
+```
+sudo make install
+```
 (optional if you want to test the program) Move the executable to the root of the project:
 ```
 mv crisp ..
@@ -127,4 +131,5 @@ shuffle logic so that the app can be able to switch between sequential and shuff
 - There is also might be a slight glitching on the music when the window gets resized while playing a track.
 - Also, if there is no music on ~/Music directory, it will be a blank screen.
 - There was an issue that I had before where some libraries requires other dependencies that I don't need at the moment like libclipboard.
+- On a similar note, there might be some warnings from cmake about deprecated libraries or warnings about the tests from the libraries but it doesn't impact the program.
 - Although I picked leif for it's easy and portable GUI implementation, it hasn't been updated in two years and I believe I would need to replace that GUI with something else later on.
